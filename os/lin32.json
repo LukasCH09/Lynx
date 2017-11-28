@@ -1,0 +1,31 @@
+{
+  "productName": "BitChain",
+  "appId": "com.github.cryptounited.bitchain",
+  "files": [
+    "dist/",
+    "node_modules/",
+    "app.html",
+    "main.prod.js",
+    "main.prod.js.map",
+    "package.json"
+  ],
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "CryptoUnited",
+      "repo": "BitChain",
+      "vPrefixedTagName": "true",
+      "protocol": "https"
+    }
+  ],
+  "linux": {
+    "target": [
+      "deb",
+      "AppImage"
+    ]
+  },
+  "directories": {
+    "buildResources": "resources",
+    "output": "build/releases/lin32"
+  }
+}

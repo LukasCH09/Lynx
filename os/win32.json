@@ -1,0 +1,33 @@
+{
+  "productName": "BitChain",
+  "appId": "com.github.cryptounited.bitchain",
+  "files": [
+    "dist/",
+    "node_modules/",
+    "app.html",
+    "main.prod.js",
+    "main.prod.js.map",
+    "package.json"
+  ],
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "CryptoUnited",
+      "repo": "BitChain",
+      "vPrefixedTagName": "true",
+      "protocol": "https"
+    }
+  ],
+  "win": {
+    "target": [
+      "nsis"
+    ]
+  },
+  "nsis": {
+    "perMachine": true
+  },
+  "directories": {
+    "buildResources": "resources",
+    "output": "build/releases/win32"
+  }
+}
