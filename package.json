@@ -1,8 +1,8 @@
 {
-  "name": "BitChain",
-  "productName": "BitChain",
-  "version": "0.1.0",
-  "description": "Electron application providing the graphical user interface for a bitcoin based cryptocurrency using RPC",
+  "name": "Lynx-Gui",
+  "productName": "Lynx",
+  "version": "0.1.5",
+  "description": "Electron application providing the graphical user interface for the ECC Wallet",
   "scripts": {
     "test": "cross-env NODE_ENV=test BABEL_DISABLE_CACHE=1 node --trace-warnings ./test/runTests.js",
     "test-all": "npm run lint && npm run flow && npm run test && npm run build && npm run test-e2e",
@@ -35,8 +35,8 @@
   },
   "browserslist": "electron 1.6",
   "build": {
-    "productName": "BitChain",
-    "appId": "com.github.cryptounited.bitchain",
+    "productName": "Ecc-GUI",
+    "appId": "com.github.greg-griffith.lynx",
     "files": [
       "dist/",
       "node_modules/",
@@ -86,16 +86,16 @@
       "buildResources": "resources"
     }
   },
-  "repository": "git+https://github.com/cryptounited/bitchain.git",
+  "repository": "git+https://github.com/greg-griffith/lynx.git",
   "author": "Greg Griffith <griffith@cryptounited.com> (https://github.com/greg-griffith)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cryptounited/bitchain/issues"
+    "url": "https://github.com/greg-griffith/lynx/issues"
   },
   "keywords": [
     "electron"
   ],
-  "homepage": "https://github.com/cryptounited/bitchain",
+  "homepage": "https://github.com/greg-griffith/lynx",
   "jest": {
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/internals/mocks/fileMock.js",
