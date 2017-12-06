@@ -2,12 +2,12 @@
   "productName": "BitChain",
   "appId": "com.github.cryptounited.bitchain",
   "files": [
-    "dist/",
-    "node_modules/",
-    "app.html",
-    "main.prod.js",
-    "main.prod.js.map",
-    "package.json"
+    "./app/dist/",
+    "./app/node_modules/",
+    "./app/app.html",
+    "./app/main.prod.js",
+    "./app/main.prod.js.map",
+    "./package.json"
   ],
   "publish": [
     {

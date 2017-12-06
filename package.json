@@ -22,7 +22,8 @@
     "flow": "flow check",
     "flow-typed": "rimraf flow-typed/npm && flow-typed install --overwrite || true",
     "start-hot-renderer": "cross-env HOT=1 NODE_ENV=development electron -r babel-register -r babel-polyfill ./app/main.dev",
-    "postinstall": "concurrently \"npm run flow-typed\" \"npm run build\" \"npm run build-dll\" \"install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
+    "postinstall": "npm rebuild --runtime=electron --target=1.6.6 --disturl=https://atom.io/download/atom-shell --build-from-source",
+    "setup": "concurrently \"npm run flow-typed\" \"npm run build\" \"npm run build-dll\" \"install-app-deps\" \"node node_modules/fbjs-scripts/node/check-dev-engines.js package.json\"",
     "dev": "cross-env START_HOT=1 npm run hot-updates-server",
     "package-aa-win-32": "npm run build && build --win -c ./os/win32.json -p always",
     "package-aa-win-64": "npm run build && build --win --x64 -c ./os/win64.json -p always",
@@ -34,58 +35,6 @@
     "package-all": "npm run package-win && npm run package-win-32 && npm run package-linux && npm run package-linux-32"
   },
   "browserslist": "electron 1.6",
-  "build": {
-    "productName": "BitChain",
-    "appId": "com.github.cryptounited.bitchain",
-    "files": [
-      "dist/",
-      "node_modules/",
-      "app.html",
-      "main.prod.js",
-      "main.prod.js.map",
-      "package.json"
-    ],
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "Greg-Griffith",
-        "repo": "Lynx",
-        "vPrefixedTagName": "true",
-        "protocol": "https"
-      }
-    ],
-    "dmg": {
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ]
-    },
-    "win": {
-      "target": [
-        "nsis"
-      ]
-    },
-    "nsis": {
-      "perMachine": true
-    },
-    "linux": {
-      "target": [
-        "deb",
-        "AppImage"
-      ]
-    },
-    "directories": {
-      "buildResources": "resources"
-    }
-  },
   "repository": "git+https://github.com/cryptounited/bitchain.git",
   "author": "Greg Griffith <griffith@cryptounited.com> (https://github.com/greg-griffith)",
   "license": "MIT",
@@ -141,25 +90,25 @@
     "electron": "1.6.10",
     "electron-builder": "^19.8.0",
     "electron-devtools-installer": "^2.2.0",
-    "enzyme": "*",
+    "enzyme": "^2.9.1",
     "enzyme-to-json": "^1.5.1",
-    "eslint": "*",
-    "eslint-config-airbnb": "*",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.0.1",
     "eslint-formatter-pretty": "^1.1.0",
     "eslint-import-resolver-webpack": "^0.8.3",
     "eslint-plugin-compat": "^1.0.4",
     "eslint-plugin-flowtype": "^2.33.0",
-    "eslint-plugin-flowtype-errors": "*",
+    "eslint-plugin-flowtype-errors": "^3.3.0",
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jest": "^20.0.3",
-    "eslint-plugin-jsx-a11y": "*",
+    "eslint-plugin-jsx-a11y": "5.0.3",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-react": "^7.1.0",
     "express": "^4.15.3",
-    "extract-text-webpack-plugin": "*",
+    "extract-text-webpack-plugin": "^2.1.2",
     "fbjs-scripts": "^0.8.0",
     "file-loader": "^0.11.1",
-    "flow-bin": "*",
+    "flow-bin": "^0.48.0",
     "flow-runtime": "^0.13.0",
     "flow-typed": "^2.1.2",
     "html-webpack-plugin": "^2.29.0",
@@ -168,9 +117,9 @@
     "jsdom": "^11.0.0",
     "minimist": "^1.2.0",
     "node-sass": "^4.5.3",
-    "react-addons-test-utils": "*",
-    "react-test-renderer": "*",
-    "redux-logger": "*",
+    "react-addons-test-utils": "^15.0.6",
+    "react-test-renderer": "^15.6.1",
+    "redux-logger": "^3.0.6",
     "request": "*",
     "rimraf": "^2.6.1",
     "sass-loader": "^6.0.6",
@@ -181,7 +130,7 @@
     "stylelint": "^7.12.0",
     "stylelint-config-standard": "^16.0.0",
     "url-loader": "^0.5.8",
-    "webpack": "*",
+    "webpack": "^3.0.0",
     "webpack-bundle-analyzer": "^2.8.2",
     "webpack-dev-server": "^2.5.0",
     "webpack-merge": "^4.1.0"
@@ -192,11 +141,11 @@
     "bootstrap-material-design": "^0.5.10",
     "child_process": "^1.0.2",
     "devtron": "^1.4.0",
-    "electron-debug": "*",
-    "electron-dl": "*",
+    "electron-debug": "^1.2.0",
+    "electron-dl": "^1.10.0",
     "electron-download-manager": "https://github.com/danmolitor/electron-download-manager.git",
-    "electron-settings": "*",
-    "electron-updater": "*",
+    "electron-settings": "^3.1.1",
+    "electron-updater": "^2.16.1",
     "events": "^1.1.1",
     "font-awesome": "^4.7.0",
     "glob": "^7.1.2",
@@ -222,8 +171,6 @@
     "npm": ">=3.x",
     "yarn": ">=0.21.3"
   },
-  "main": "index.js",
-  "directories": {
-    "test": "test"
-  }
+  "dev-main": "index.js",
+  "main": "./app/main.prod.js"
 }
