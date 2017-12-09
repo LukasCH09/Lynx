@@ -4,6 +4,7 @@
 @import "~bootstrap-material-design/dist/css/ripples.min.css";
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,700');
 @import "./styles/Sidebar.css";
+@import "./styles/BalanceBanner.css";
 @import "./styles/About.css";
 @import "./styles/Security.css";
 @import "./styles/Home.css";

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
 import Sidebar from './Sidebar';
+import BalanceBanner from './BalanceBanner';
 
 const event = require('../utils/eventhandler');
 
@@ -67,6 +68,7 @@ export default class App extends Component<Props> {
         <div className={`splash-image-container${this.state.splash ? '' : ' -disappear'}`}>
           <img className="splash-image" src={splash} />
         </div>
+        <BalanceBanner route={this.props.route} />
         <Sidebar route={this.props.route} />
         <div className="my_wrapper">
           {this.props.children}
