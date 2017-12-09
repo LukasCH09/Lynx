@@ -1,5 +1,8 @@
-# BitChain
+# Lynx
 
+## Contributors
+Greg Griffith
+Dan Molitor
 
 
 ## Install
