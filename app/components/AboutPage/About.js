@@ -24,21 +24,21 @@ export default class About extends Component {
                 This User Interface is brought to you by <a style={{ cursor: 'pointer' }} onClick={this.openLink.bind(this, 'https://www.cryptounited.io/')}>CryptoUnited 2017 &#169;</a>
               </div>
               <div className="col-md-6 col-lg-6 col-xs-6" style={{ cursor: 'pointer' }}>
-                <a onClick={this.openLink.bind(this, 'https://bitcointalk.org/index.php?topic=1006830.0')} className="section">
+                <a onClick={this.openLink.bind(this, '')} className="section">
                   <img src={bitcoinImage} style={{ width: '50%' }} alt="" />
                   <br />
-                  <span className="sub">{lang.aboutAnnouncementThread}</span>
+                  <span className="sub">This is a place holder for BCT link</span>
                 </a>
               </div>
               <div className="col-md-6 col-lg-6 col-xs-6">
                 <img src={githubImage} style={{ width: '50%' }} alt="" />
                 <div className="section">
-                  <a style={{ cursor: 'pointer' }} onClick={this.openLink.bind(this, 'https://github.com/Greg-Griffith/ECCoin')}> ECC Github </a>
+                  <a style={{ cursor: 'pointer' }} onClick={this.openLink.bind(this, 'https://github.com/CryptoUnited/BitChain')}> BitChain Github </a>
                 </div>
               </div>
               <div>
                 <div className="larger-text">
-                    <p>The Lynx User Interface for ECC</p>
+                    <p>The Bitchain User Interface for Bitcoin based cryptocurrencies</p>
                     <p>This user interface is brought to you free of charge by the engineers at CryptoUnited. If you like this product and would like to show your support for future development of this and other free software, you may send a donation to:<br/> BTC: 1LWdVxMkdYDSJKoLEXddUKFh5b2AWqu4M6<br/> BCH: 1LWdVxMkdYDSJKoLEXddUKFh5b2AWqu4M6 <br/></p>
                 </div>
               </div>

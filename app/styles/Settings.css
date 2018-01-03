@@ -33,7 +33,7 @@
 }
 
 .settings .tab_body .panel{
-	height: 80vh;
+	min-height: 50vh;
 }
 
 .rule{
@@ -129,7 +129,7 @@
 .console_body{
 	position: relative;
 	padding: 25px;
-	height: 80vh;
+	min-height: 50vh;
 }
 
 .console_wrapper{

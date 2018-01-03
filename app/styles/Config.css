@@ -4,7 +4,7 @@
 }
 
 .configuration .panel-body {
-  height: 90vh;
+  min-height: 50vh;
 }
 
 .configuration .config-row {

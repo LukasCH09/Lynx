@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import glob from 'glob';
-import Wallet from '../utils/wallet';
-
+import WalletWrapper from '../utils/walletwrapper';
+import Updater from '../utils/updater';
 import { traduction } from '../lang/lang';
-
 const request = require('request-promise-native');
 const homedir = require('os').homedir();
 const fs = require('fs');
 const event = require('../utils/eventhandler');
-
 const { ipcRenderer } = require('electron');
 
 const lang = traduction();
-const wallet = new Wallet();
 
 export default class Sidebar extends Component {
   constructor(props) {
@@ -22,7 +19,6 @@ export default class Sidebar extends Component {
       starting: false,
       running: false,
       stopping: false,
-      staking: false,
       pathname: props.route.location.pathname,
       active: {
         default: '',
@@ -40,9 +36,9 @@ export default class Sidebar extends Component {
         about: '',
         wallet: '',
       },
-      currentHeight: 0,
+      blocks: 0,
       headers: 0,
-      numpeers: 0,
+      connections: 0,
       daemonInstalled: false,
       newVersionAvailable: false,
     };
@@ -82,56 +78,14 @@ export default class Sidebar extends Component {
   }
 
   infoUpdate() {
-    const self = this;
-    wallet.getblockcount().then((height) => {
-      self.setState({currentHeight: height});
-    }).catch((error) => {
-      self.setState({currentHeight: 0});
-    });
-
-    wallet.getpeerinfo().then((peers) => {
-      self.setState({numpeers: peers.length});
-    }).catch((error) => {
-      self.setState({numpeers: 0});
-    });
-
-    wallet.getInfo().then((data) => {
-      this.setState(() => {
-        return {
-          headers: data.headers,
-          staking: data.staking,
-        };
-      });
-
-      if (data && this.state.starting) {
-        event.emit('animate', 'Block index loaded...');
-        this.setState(() => {
-          return {
-            starting: false,
-            running: true,
-          };
-        }, () => {
-          event.emit('hide');
+    results = WalletWrapper.getStateValues('blocks', 'headers', 'connections', 'starting', 'running', 'stopping');
+    for( var key in results){
+        console.log(key, dictionary[key]);
+        self.setState({
+            key : results[key],
         });
-      } else if (data && !this.state.running) {
-        this.setState(() => {
-          return {
-            starting: false,
-            running: true,
-          };
-        });
-      }
-    }).catch((err) => {
-      if (err.message === 'connect ECONNREFUSED 127.0.0.1:19119') {
-        if (this.state.stopping) {
-          this.setState(() => {
-            return {
-              stopping: false,
-              running: false,
-            };
-          });
-          event.emit('hide');
-        }
+    }
+/*
         if (!this.state.starting) {
           glob(`${homedir}/.eccoin-daemon/Eccoind*`, (error, files) => {
             if (!files.length) {
@@ -154,61 +108,15 @@ export default class Sidebar extends Component {
             }
           });
         }
-      } else {
-        event.emit('show', err.message);
-      }
-    });
+*/
   }
 
   checkDaemonVersion() {
-    const path = `${homedir}/.eccoin-daemon`;
-
-    fs.access(`${path}/daemon-version.txt`, (err) => {
-      if (err) {
-        console.log(err);
-        this.setState(() => {
-          return {
-            newVersionAvailable: true,
-          };
-        });
-      } else {
-        fs.readFile(`${path}/daemon-version.txt`, 'utf8', (err, data) => {
-          if (err) {
-            throw err;
-          } else {
-            const version = data.split(' ')[1];
-
-            const opts = {
-              url: 'https://api.github.com/repos/Greg-Griffith/eccoin/releases/latest',
-              headers: {
-                'User-Agent': 'request',
-              },
-            };
-            request(opts)
-              .then((response) => {
-                const path = `${homedir}/.eccoin-daemon`;
-                const parsed = JSON.parse(response);
-                const githubVersion = parsed.name.split(' ')[1];
-                if (version !== githubVersion) {
-                  console.log('NOT EQUAL');
-                  this.setState(() => {
-                    return {
-                      newVersionAvailable: true,
-                    };
-                  });
-                } else {
-                  this.setState(() => {
-                    return {
-                      newVersionAvailable: false,
-                    };
-                  });
-                }
-              })
-              .catch(error => console.log(error));
-          }
-        });
-      }
-    });
+    try{ 
+        result = Updater.checkDaemonVersion(); 
+        this.setState(() => { return { newVersionAvailable : result, }; });
+    }
+    catch(err){ console.log(err); }
   }
 
   checkStateMenu(pathname) {
@@ -267,48 +175,11 @@ export default class Sidebar extends Component {
   }
 
   saveAndStopDaemon() {
-    if (process.platform.indexOf('win') > -1) {
-      event.emit('animate', 'Stopping daemon...');
-    }
-    this.setState(() => {
-      return {
-        stopping: true,
-      };
-    });
-    wallet.walletstop()
-      .then(() => {
-        this.setState(() => {
-          return {
-            starting: false,
-            staking: false,
-          };
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    WalletWrapper.stopWallet();
   }
 
   startDaemon() {
-    this.setState(() => {
-      return {
-        starting: true,
-      };
-    });
-    event.emit('show', 'Starting daemon...');
-    wallet.walletstart((result) => {
-      if (result) {
-        event.emit('hide');
-        event.emit('show', 'Loading block index...');
-      } else {
-        this.setState(() => {
-          return {
-            starting: false,
-          };
-        });
-        event.emit('show', 'Daemon is not in correct directory.');
-      }
-    });
+    WalletWrapper.startWallet();
   }
 
   render() {
