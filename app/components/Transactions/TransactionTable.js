@@ -116,7 +116,7 @@ class TransactionTable extends Component {
     }).catch((err) => {
       console.log(err);
       if (this.state.requesting) {
-        event.emit('animate', lang.notificationDaemonDownOrSyncing);
+        event.emit('animate', lang.notificationWalletDownOrSyncing);
         self.setState({ requesting: false });
       }
     });
@@ -148,7 +148,7 @@ class TransactionTable extends Component {
       }).catch((err) => {
         console.log(err);
         if (this.state.requesting) {
-          event.emit('animate', lang.notificationDaemonDownOrSyncing);
+          event.emit('animate', lang.notificationWalletDownOrSyncing);
           self.setState({ requesting: false });
         }
       });

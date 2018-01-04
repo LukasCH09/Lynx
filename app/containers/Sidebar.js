@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import glob from 'glob';
 import {walletwrapper} from '../utils/walletwrapper';
-import Updater from '../utils/updater';
+import {updater} from '../utils/updater';
 import { traduction } from '../lang/lang';
 const request = require('request-promise-native');
 const homedir = require('os').homedir();
@@ -59,7 +59,7 @@ export default class Sidebar extends Component {
       this.checkWalletVersion();
     }, 600000);
 
-    this.checkWalletrsion();
+    this.checkWalletVersion();
 
     ipcRenderer.once('wallet-version-updated', (e, err) => {
       this.checkWalletVersion();
@@ -113,7 +113,7 @@ export default class Sidebar extends Component {
 
   checkWalletVersion() {
     try{ 
-        result = Updater.checkWalletVersion(); 
+        var result = updater.checkWalletVersion(); 
         this.setState(() => { return { newVersionAvailable : result, }; });
     }
     catch(err){ console.log(err); }

@@ -33,7 +33,7 @@ export default class Downloads extends Component {
               if (err) throw err;
               ipcRenderer.send('wallet-version-created');
               event.emit('hide');
-              event.emit('animate', 'Wallet downloaded and ready to start.');
+              event.emit('show', 'Wallet downloaded and ready to start.');
             });
           })
           .catch(error => console.log(error));
@@ -45,20 +45,20 @@ export default class Downloads extends Component {
     ipcRenderer.removeAllListeners('wallet-downloaded');
   }
   downloadLinux64 = () => {
-    event.emit('animate', 'Wallet downloading...');
+    event.emit('show', 'Wallet downloading...');
     ipcRenderer.send('wallet-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-linux64', filename: 'Eccoind' });
   };
   downloadLinux32 = () => {
-    event.emit('animate', 'Wallet downloading...');
+    event.emit('show', 'Wallet downloading...');
     ipcRenderer.send('wallet-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-linux32', filename: 'Eccoind' });
 
   };
   downloadWindows64 = () => {
-    event.emit('animate', 'Wallet downloading...');
+    event.emit('show', 'Wallet downloading...');
     ipcRenderer.send('wallet-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-win64.exe', filename: 'Eccoind' });
   };
   downloadWindows32 = () => {
-    event.emit('animate', 'Wallet downloading...');
+    event.emit('show', 'Wallet downloading...');
     ipcRenderer.send('wallet-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-win32.exe', filename: 'Eccoind' });
   };
   render() {

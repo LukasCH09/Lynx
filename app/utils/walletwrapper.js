@@ -134,7 +134,7 @@ export default class WalletWrapper {
 
     stopWallet(){
         if (process.platform.indexOf('win') > -1) {
-            event.emit('animate', 'Stopping daemon...');
+            event.emit('animate', 'Stopping wallet...');
         }
         this.setState(() => {
             return {

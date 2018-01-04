@@ -41,11 +41,11 @@ class CurrentAddresses extends Component {
       this.setState({ existingAddresses: data, requesting: false });
     }).catch((err) => {
       if (err.message === 'connect ECONNREFUSED 127.0.0.1:19119') {
-        glob(`${homedir}/.eccoin-daemon/Eccoind*`, (error, files) => {
+        glob(`${homedir}/.eccoin-wallet/Eccoind*`, (error, files) => {
           if (!files.length) {
-            event.emit('show', 'Install daemon via Downloads tab.');
+            event.emit('show', 'Install wallet via Downloads tab.');
           } else {
-            event.emit('show', 'Daemon not running.');
+            event.emit('show', 'Wallet not running.');
           }
         });
       } else if (err.message !== 'Loading block index...') {

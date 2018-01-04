@@ -48,11 +48,11 @@ class Send extends Component {
       }
     }).catch((err) => {
       if (err.message === 'connect ECONNREFUSED 127.0.0.1:19119') {
-        glob(`${homedir}/.eccoin-daemon/Eccoind*`, (error, files) => {
+        glob(`${homedir}/.eccoin-wallet/Eccoind*`, (error, files) => {
           if (!files.length) {
-            event.emit('show', 'Install daemon via Downloads tab.');
+            event.emit('show', 'Install wallet via Downloads tab.');
           } else {
-            event.emit('show', 'Daemon not running.');
+            event.emit('show', 'Wallet not running.');
           }
         });
       } else if (err.message !== 'Loading block index...' && err.message !== 'connect ECONNREFUSED 127.0.0.1:19119') {
@@ -201,7 +201,7 @@ class Send extends Component {
         $('.btn_confirm').removeClass('disable');
         self.setState({passPhraseError: lang.walletWrongPass});
       } else if (data !== null && data.code === 'ECONNREFUSED') { // connection refused
-        event.emit('animate', lang.notificationDaemonDownOrSyncing);
+        event.emit('animate', lang.notificationWalletDownOrSyncing);
         self.setState({ dialog: false, eccAddress: '', amount: '' });
       } else if (data !== null && data.code === -17) { // already unlocked - auto locked - try again
         self.wunlock(false, newSeconds);

@@ -1,4 +1,5 @@
-
+const homedir = require('os').homedir();
+const fs = require('fs');
 
 export default class Updater {
 
@@ -30,8 +31,6 @@ export default class Updater {
             }
         });
     }
-
-
-
-
 }
+
+export let updater = new Updater();

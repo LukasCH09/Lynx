@@ -62,11 +62,11 @@ class Security extends Component {
       }
     }).catch((err) => {
       if (err.message === 'connect ECONNREFUSED 127.0.0.1:19119') {
-        glob(`${homedir}/.eccoin-daemon/Eccoind*`, (error, files) => {
+        glob(`${homedir}/.eccoin-wallet/Eccoind*`, (error, files) => {
           if (!files.length) {
-            event.emit('show', 'Install daemon via Downloads tab.');
+            event.emit('show', 'Install wallet via Downloads tab.');
           } else {
-            event.emit('show', 'Daemon not running.');
+            event.emit('show', 'Wallet not running.');
           }
         });
       } else if (err.message !== 'Loading block index...' && err.message !== 'connect ECONNREFUSED 127.0.0.1:19119') {
@@ -255,7 +255,7 @@ class Security extends Component {
       return (
         <div className="page">
           <p className="title">{lang.backup1CreateYourPassword}</p>
-          <p>This feature is unavailable while the daemon is not running.</p>
+          <p>This feature is unavailable while the wallet is not running.</p>
         </div>
       );
     } else if (this.state.step === 1) {

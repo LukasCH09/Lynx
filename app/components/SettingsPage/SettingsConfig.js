@@ -176,7 +176,7 @@ export default class Config extends Component {
           <div className="col-md-12">
             <div className="panel panel-default">
               <div className="panel-body">
-                <p className="title">Configuration (daemon must be stopped for changes to take effect)</p>
+                <p className="title">Configuration (wallet must be stopped for changes to take effect)</p>
                 <div className="row config-row">
                   <div className="col-md-6 col-sm-6 col-xs-6">Options</div>
                   <div className="col-md-3 col-sm-3 col-xs-3">On</div>

@@ -41,7 +41,7 @@ class SettingsMain extends Component {
       self.setState({ tx_fee: data.paytxfee });
     }).catch((err) => {
       if (err.message === 'connect ECONNREFUSED 127.0.0.1:19119') {
-        event.emit('animate', 'Daemon not running.');
+        event.emit('animate', 'Wallet not running.');
       } else if (!err.message === 'Loading block index...') {
         event.emit('animate', err.message);
       }

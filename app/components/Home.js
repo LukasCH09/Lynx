@@ -162,13 +162,13 @@ export default class Home extends Component {
           if (data !== null && data.code === -14) {
             self.setState({ passPhraseError: lang.walletWrongPass });
           } else if (data !== null && data.code === 'ECONNREFUSED') {
-            event.emit('show', lang.notificationDaemonDownOrSyncing);
+            event.emit('show', lang.notificationWalletDownOrSyncing);
             self.setState({ dialog: false, passPhraseError: '', passPhrase: '', timeL: '' });
           } else if (data === null) {
             event.emit('animate', `${lang.walletUnlockedFor} ${timeL} ${lang.sedonds}`);
             self.setState({dialog: false, passPhraseError: '', passPhrase: '', timeL: '' });
           } else {
-            event.emit('show', lang.notificationDaemonDownOrSyncing);
+            event.emit('show', lang.notificationWalletDownOrSyncing);
             self.setState({ dialog: false, passPhraseError: '', passPhrase: '', timeL: '' });
           }
         }).catch((err) => {
