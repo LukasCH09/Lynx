@@ -2,15 +2,15 @@
 
 export default class Updater {
 
-    checkDaemonVersion() {
-        const path = `${homedir}/.eccoin-daemon`;
-        fs.access(`${path}/daemon-version.txt`, (err) => {
+    checkWalletVersion() {
+        const path = `${homedir}/.eccoin-wallet`;
+        fs.access(`${path}/wallet-version.txt`, (err) => {
             if (err) {
                 console.log(err);
                 return true;
             } 
             else {
-                fs.readFile(`${path}/daemon-version.txt`, 'utf8', (err, data) => {
+                fs.readFile(`${path}/wallet-version.txt`, 'utf8', (err, data) => {
                 if (err) { throw err; } 
                 else {
                     const version = data.split(' ')[1];
@@ -19,7 +19,7 @@ export default class Updater {
                         headers: { 'User-Agent': 'request', },
                     };
                     request(opts).then((response) => {
-                        const path = `${homedir}/.eccoin-daemon`;
+                        const path = `${homedir}/.eccoin-wallet`;
                         const parsed = JSON.parse(response);
                         const githubVersion = parsed.name.split(' ')[1];
                         if (version !== githubVersion) { return true; } 

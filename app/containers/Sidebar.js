@@ -39,13 +39,13 @@ export default class Sidebar extends Component {
       blocks: 0,
       headers: 0,
       connections: 0,
-      daemonInstalled: false,
+      walletInstalled: false,
       newVersionAvailable: false,
     };
 
-    this.saveAndStopDaemon = this.saveAndStopDaemon.bind(this);
-    this.startDaemon = this.startDaemon.bind(this);
-    this.checkDaemonVersion = this.checkDaemonVersion.bind(this);
+    this.saveAndStopWallet = this.saveAndStopWallet.bind(this);
+    this.startWallet = this.startWallet.bind(this);
+    this.checkWalletVersion = this.checkWalletVersion.bind(this);
   }
 
   componentDidMount() {
@@ -55,14 +55,14 @@ export default class Sidebar extends Component {
     this.timerInfo = setInterval(() => {
       self.infoUpdate();
     }, 5000);
-    this.timerCheckDaemonVersion = setInterval(() => {
-      this.checkDaemonVersion();
+    this.timerCheckWalletVersion = setInterval(() => {
+      this.checkWalletVersion();
     }, 600000);
 
-    this.checkDaemonVersion();
+    this.checkWalletrsion();
 
-    ipcRenderer.once('daemon-version-updated', (e, err) => {
-      this.checkDaemonVersion();
+    ipcRenderer.once('wallet-version-updated', (e, err) => {
+      this.checkWalletVersion();
     });
   }
 
@@ -74,7 +74,7 @@ export default class Sidebar extends Component {
 
   componentWillUnmount() {
     clearInterval(this.timerInfo);
-    clearInterval(this.timerCheckDaemonVersion);
+    clearInterval(this.timerCheckWalletVersion);
   }
 
   infoUpdate() {
@@ -87,19 +87,19 @@ export default class Sidebar extends Component {
     }
 /*
         if (!this.state.starting) {
-          glob(`${homedir}/.eccoin-daemon/Eccoind*`, (error, files) => {
+          glob(`${homedir}/.eccoin-wallet/Eccoind*`, (error, files) => {
             if (!files.length) {
-              event.emit('show', 'Install daemon via Downloads tab.');
+              event.emit('show', 'Install wallet via Downloads tab.');
               this.setState(() => {
                 return {
-                  daemonInstalled: false,
+                  walletInstalled: false,
                 };
               });
             } else if (files.length) {
-              event.emit('show', 'Daemon not running.');
+              event.emit('show', 'Wallet not running.');
               this.setState(() => {
                 return {
-                  daemonInstalled: true,
+                  walletInstalled: true,
                   running: false,
                 };
               });
@@ -111,9 +111,9 @@ export default class Sidebar extends Component {
 */
   }
 
-  checkDaemonVersion() {
+  checkWalletVersion() {
     try{ 
-        result = Updater.checkDaemonVersion(); 
+        result = Updater.checkWalletVersion(); 
         this.setState(() => { return { newVersionAvailable : result, }; });
     }
     catch(err){ console.log(err); }
@@ -174,11 +174,11 @@ export default class Sidebar extends Component {
     return null;
   }
 
-  saveAndStopDaemon() {
+  saveAndStopWallet() {
     walletwrapper.stopWallet();
   }
 
-  startDaemon() {
+  startWallet() {
     walletwrapper.startWallet();
   }
 
@@ -268,28 +268,28 @@ export default class Sidebar extends Component {
         <div className="sidebar-section-container">
         {this.state.running //eslint-disable-line
             ? !this.state.stopping
-              ? <button className="stopStartButton" onClick={this.saveAndStopDaemon}>Stop Daemon</button>
-              : <button className="stopStartButton" disabled>Daemon stopping...</button>
+              ? <button className="stopStartButton" onClick={this.saveAndStopWallet}>Stop Wallet</button>
+              : <button className="stopStartButton" disabled>Wallet stopping...</button>
             : !this.state.starting
               ?
-                !this.state.daemonInstalled
+                !this.state.walletInstalled
                     ?
                 <Link to="/downloads" id="a-tag-button-wrapper">
                     <button className="stopStartButton">
-                        Click here to install daemon 
+                        Click here to install Wallet 
                     </button>
                 </Link>
                 :
                 <button
                   className="stopStartButton"
-                  onClick={this.startDaemon}
+                  onClick={this.startWallet}
                 >
-                  Start Daemon
+                  Start Wallet
                 </button>
-              : <button className="stopStartButton" disabled>Daemon starting...</button>
+              : <button className="stopStartButton" disabled>Wallet starting...</button>
           }
           {this.state.newVersionAvailable
-            ? <div className="new-version">New Daemon Version Available</div>
+            ? <div className="new-version">New Wallet Version Available</div>
             : null
           }
         </div>

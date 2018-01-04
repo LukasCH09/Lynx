@@ -13,7 +13,7 @@ const event = require('../../utils/eventhandler');
 
 export default class Downloads extends Component {
   componentWillMount() {
-    ipcRenderer.on('daemon-downloaded', (e, err) => {
+    ipcRenderer.on('wallet-downloaded', (e, err) => {
       if (err) {
         event.emit('hide');
         event.emit('animate', err);
@@ -26,14 +26,14 @@ export default class Downloads extends Component {
         };
         return request(opts)
           .then((response) => {
-            const path = `${homedir}/.eccoin-daemon`;
+            const path = `${homedir}/.eccoin-wallet`;
             const parsed = JSON.parse(response);
             const version = parsed.name;
-            fs.writeFile(`${path}/daemon-version.txt`, version, (err) => {
+            fs.writeFile(`${path}/wallet-version.txt`, version, (err) => {
               if (err) throw err;
-              ipcRenderer.send('daemon-version-created');
+              ipcRenderer.send('wallet-version-created');
               event.emit('hide');
-              event.emit('animate', 'Daemon downloaded and ready to start.');
+              event.emit('animate', 'Wallet downloaded and ready to start.');
             });
           })
           .catch(error => console.log(error));
@@ -42,24 +42,24 @@ export default class Downloads extends Component {
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeAllListeners('daemon-downloaded');
+    ipcRenderer.removeAllListeners('wallet-downloaded');
   }
   downloadLinux64 = () => {
-    event.emit('animate', 'Daemon downloading...');
-    ipcRenderer.send('daemon-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-linux64', filename: 'Eccoind' });
+    event.emit('animate', 'Wallet downloading...');
+    ipcRenderer.send('wallet-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-linux64', filename: 'Eccoind' });
   };
   downloadLinux32 = () => {
-    event.emit('animate', 'Daemon downloading...');
-    ipcRenderer.send('daemon-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-linux32', filename: 'Eccoind' });
+    event.emit('animate', 'Wallet downloading...');
+    ipcRenderer.send('wallet-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-linux32', filename: 'Eccoind' });
 
   };
   downloadWindows64 = () => {
-    event.emit('animate', 'Daemon downloading...');
-    ipcRenderer.send('daemon-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-win64.exe', filename: 'Eccoind' });
+    event.emit('animate', 'Wallet downloading...');
+    ipcRenderer.send('wallet-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-win64.exe', filename: 'Eccoind' });
   };
   downloadWindows32 = () => {
-    event.emit('animate', 'Daemon downloading...');
-    ipcRenderer.send('daemon-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-win32.exe', filename: 'Eccoind' });
+    event.emit('animate', 'Wallet downloading...');
+    ipcRenderer.send('wallet-download', { url: 'https://www.ecc.network/downloads/updates/eccoind-win32.exe', filename: 'Eccoind' });
   };
   render() {
     return (
