@@ -36,13 +36,13 @@ export default class WalletWrapper {
 
     getStateValues()
     {
-        results = {};
-        for(i = 0; i < arguments.length; i++)
+        var results = {};
+        for(var i = 0; i < arguments.length; i++)
         {
-            console.log("checking for arg " + arguments[1]);
+            //console.log("checking for arg " + arguments[i]);
             if(this.state[arguments[i]] !== undefined)
             {
-                results.push({ key: arguments[i], value: this.state[arguments[i]] });
+                results[arguments[i]] = this.state[arguments[i]];
             }
         }
         return results;
@@ -155,6 +155,7 @@ export default class WalletWrapper {
     }
 }
 
+export let walletwrapper = new WalletWrapper();
 
 
 

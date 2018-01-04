@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import glob from 'glob';
-import WalletWrapper from '../utils/walletwrapper';
+import { walletwrapper }  from '../utils/walletwrapper';
 import { traduction } from '../lang/lang';
 const request = require('request-promise-native');
 const fs = require('fs');
@@ -34,10 +34,10 @@ export default class Sidebar extends Component {
   }
 
   getWalletInfo() {
-    results = WalletWrapper.getStateValues('balance', 'stake', 'unconfirmed');
+    var results = walletwrapper.getStateValues('balance', 'stake', 'unconfirmed');
     for( var key in results){
-        console.log(key, dictionary[key]);
-        self.setState({
+        //console.log(key, results[key]);
+        this.setState({
             key : results[key],
         });
     }

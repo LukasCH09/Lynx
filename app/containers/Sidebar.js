@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import glob from 'glob';
-import WalletWrapper from '../utils/walletwrapper';
+import {walletwrapper} from '../utils/walletwrapper';
 import Updater from '../utils/updater';
 import { traduction } from '../lang/lang';
 const request = require('request-promise-native');
@@ -78,10 +78,10 @@ export default class Sidebar extends Component {
   }
 
   infoUpdate() {
-    results = WalletWrapper.getStateValues('blocks', 'headers', 'connections', 'starting', 'running', 'stopping');
+    var results = walletwrapper.getStateValues('blocks', 'headers', 'connections', 'starting', 'running', 'stopping');
     for( var key in results){
-        console.log(key, dictionary[key]);
-        self.setState({
+        //console.log(key, results[key]);
+        this.setState({
             key : results[key],
         });
     }
@@ -175,11 +175,11 @@ export default class Sidebar extends Component {
   }
 
   saveAndStopDaemon() {
-    WalletWrapper.stopWallet();
+    walletwrapper.stopWallet();
   }
 
   startDaemon() {
-    WalletWrapper.startWallet();
+    walletwrapper.startWallet();
   }
 
   render() {
