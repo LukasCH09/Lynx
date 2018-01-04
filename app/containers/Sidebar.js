@@ -1,12 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import glob from 'glob';
 import {walletwrapper} from '../utils/walletwrapper';
 import {updater} from '../utils/updater';
 import { traduction } from '../lang/lang';
-const request = require('request-promise-native');
-const homedir = require('os').homedir();
-const fs = require('fs');
 const event = require('../utils/eventhandler');
 const { ipcRenderer } = require('electron');
 
@@ -78,37 +74,13 @@ export default class Sidebar extends Component {
   }
 
   infoUpdate() {
-    var results = walletwrapper.getStateValues('blocks', 'headers', 'connections', 'starting', 'running', 'stopping');
+    var results = walletwrapper.getStateValues('blocks', 'headers', 'connections', 'starting', 'running', 'stopping', 'walletInstalled', 'newVersionAvailable');
     for( var key in results){
         //console.log(key, results[key]);
         this.setState({
             key : results[key],
         });
     }
-/*
-        if (!this.state.starting) {
-          glob(`${homedir}/.eccoin-wallet/Eccoind*`, (error, files) => {
-            if (!files.length) {
-              event.emit('show', 'Install wallet via Downloads tab.');
-              this.setState(() => {
-                return {
-                  walletInstalled: false,
-                };
-              });
-            } else if (files.length) {
-              event.emit('show', 'Wallet not running.');
-              this.setState(() => {
-                return {
-                  walletInstalled: true,
-                  running: false,
-                };
-              });
-            } else {
-              event.emit('show', err.message);
-            }
-          });
-        }
-*/
   }
 
   checkWalletVersion() {

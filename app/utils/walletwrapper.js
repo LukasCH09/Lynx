@@ -1,6 +1,8 @@
 import Wallet from './wallet';
 const wallet = new Wallet();
 const event = require('../utils/eventhandler');
+import glob from 'glob';
+const homedir = require('os').homedir();
 
 export default class WalletWrapper {
     constructor(props){
@@ -8,6 +10,8 @@ export default class WalletWrapper {
             starting: false,
             running: false,
             stopping: false,
+            walletInstalled: false,
+            newVersionAvailable: false,
     
             //getblockchaininfo
             chain: "",
@@ -32,6 +36,18 @@ export default class WalletWrapper {
             unconfirmed: 0,
             immature: 0,
         };
+    }
+
+    componentDidMount() {
+        console.log("component mounted");
+        this.updateWalletStatus();
+        this.timerUpdate = setInterval(() => {
+            this.updateWalletStatus();
+        }, 3000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerUpdate);
     }
 
     getStateValues()
@@ -111,6 +127,27 @@ export default class WalletWrapper {
         });
     }
 
+    updateWalletStatus() {
+        if (!this.state.starting) {
+            glob(`${homedir}/.eccoin-wallet/Eccoind*`, (error, files) => {
+                if (!files.length) {
+                    this.setState({
+                        walletInstalled: false,
+                    });
+                } else if (files.length) {
+                    this.setState({
+                        walletInstalled: true,
+                        running: false,
+                    });
+                } else {
+                    event.emit('show', err.message);
+                }
+            });
+        } else { //if the wallet is running
+        
+        }
+    }
+
     startWallet() {
         this.setState(() => {
             return {
@@ -153,6 +190,11 @@ export default class WalletWrapper {
             this.processError(err);
         });
     }
+
+    render() {
+        return null;
+    }
+
 }
 
 export let walletwrapper = new WalletWrapper();

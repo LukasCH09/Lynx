@@ -1,5 +1,6 @@
 const homedir = require('os').homedir();
 const fs = require('fs');
+const request = require('request-promise-native');
 
 export default class Updater {
 

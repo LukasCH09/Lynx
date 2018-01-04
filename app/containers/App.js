@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import Sidebar from './Sidebar';
 import BalanceBanner from './BalanceBanner';
+import {walletwrapper} from '../utils/walletwrapper';
 
 const event = require('../utils/eventhandler');
 
@@ -68,6 +69,7 @@ export default class App extends Component<Props> {
         <div className={`splash-image-container${this.state.splash ? '' : ' -disappear'}`}>
           <img className="splash-image" src={splash} />
         </div>
+        <walletwrapper />
         <BalanceBanner route={this.props.route} />
         <Sidebar route={this.props.route} />
         <div className="my_wrapper">
