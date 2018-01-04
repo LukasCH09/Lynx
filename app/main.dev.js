@@ -89,11 +89,11 @@ const installExtensions = async () => {
 const DownloadManager = require('electron-download-manager');
 
 if (process.platform === 'darwin') {
-  DownloadManager.register({ downloadFolder: `${app.getPath('home')}/.eccoin-daemon`, filename: 'Eccoind' });
+  DownloadManager.register({ downloadFolder: `${app.getPath('home')}/.eccoin-wallet`, filename: 'Eccoind' });
 } else if (process.platform === 'linux') {
-  DownloadManager.register({ downloadFolder: `${app.getPath('home')}/.eccoin-daemon`, filename: 'Eccoind' });
+  DownloadManager.register({ downloadFolder: `${app.getPath('home')}/.eccoin-wallet`, filename: 'Eccoind' });
 } else if (process.platform.indexOf('win') > -1) {
-  DownloadManager.register({ downloadFolder: `${app.getPath('home')}/.eccoin-daemon`, filename: 'Eccoind.exe' });
+  DownloadManager.register({ downloadFolder: `${app.getPath('home')}/.eccoin-wallet`, filename: 'Eccoind.exe' });
 }
 
 app.on('ready', async () => {
@@ -191,16 +191,16 @@ app.on('ready', async () => {
   autoUpdater.checkForUpdates();
 });
 
-ipcMain.on('daemon-download', (e, args) => {
+ipcMain.on('wallet-download', (e, args) => {
   DownloadManager.download({ url: args.url, filename: args.filename }, (err, url) => {
     if (err) {
-      e.sender.send('daemon-downloaded', err);
+      e.sender.send('wallet-downloaded', err);
     } else {
-      e.sender.send('daemon-downloaded');
+      e.sender.send('wallet-downloaded');
     }
   });
 });
 
-ipcMain.on('daemon-version-created', (e, args) => {
-  e.sender.send('daemon-version-updated');
+ipcMain.on('wallet-version-created', (e, args) => {
+  e.sender.send('wallet-version-updated');
 });
