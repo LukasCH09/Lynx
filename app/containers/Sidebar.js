@@ -42,6 +42,7 @@ export default class Sidebar extends Component {
     this.saveAndStopWallet = this.saveAndStopWallet.bind(this);
     this.startWallet = this.startWallet.bind(this);
     this.checkWalletVersion = this.checkWalletVersion.bind(this);
+    this.infoUpdate = this.infoUpdate.bind(this);
   }
 
   componentDidMount() {
@@ -74,18 +75,18 @@ export default class Sidebar extends Component {
   }
 
   infoUpdate() {
-    var results = walletwrapper.getStateValues('blocks', 'headers', 'connections', 'starting', 'running', 'stopping', 'walletInstalled', 'newVersionAvailable');
-    for( var key in results){
-        //console.log(key, results[key]);
-        this.setState({
-            key : results[key],
-        });
-    }
+    var results = this.props.getStateValues('blocks', 'headers', 'connections', 'starting', 'running', 'stopping', 'walletInstalled', 'newVersionAvailable');
+    const newState = {};
+    for ( let key in results ) {
+      //console.log(key, results[key]);
+      newState[key] = results[key];
+      }
+    this.setState(newState);
   }
 
   checkWalletVersion() {
-    try{ 
-        var result = updater.checkWalletVersion(); 
+    try{
+        var result = updater.checkWalletVersion();
         this.setState(() => { return { newVersionAvailable : result, }; });
     }
     catch(err){ console.log(err); }
@@ -132,7 +133,7 @@ export default class Sidebar extends Component {
     } else if (pathname === '/settings') {
       aLinks.settings = 'sidebaritem_active';
       aIcons.settings = require('../../resources/images/settings2.ico');
-    } 
+    }
 
     this.setState({ active: aLinks, icons: aIcons });
   }
@@ -147,20 +148,20 @@ export default class Sidebar extends Component {
   }
 
   saveAndStopWallet() {
-    walletwrapper.stopWallet();
+    this.props.stopWallet();
   }
 
   startWallet() {
-    walletwrapper.startWallet();
+    this.props.startWallet();
   }
 
   render() {
     let progressBar = 0;
-    if (this.state.currentHeight !== 0 && this.state.headers !== 0) {
-      progressBar = (this.state.currentHeight / this.state.headers) * 100;
+    if (this.state.blocks !== 0 && this.state.headers !== 0) {
+      progressBar = (this.state.blocks / this.state.headers) * 100;
     }
 
-    if (progressBar >= 100 && this.state.currentHeight < this.state.headers) {
+    if (progressBar >= 100 && this.state.blocks < this.state.headers) {
       progressBar = 99.99;
     }
 
@@ -224,7 +225,7 @@ export default class Sidebar extends Component {
         <div className="connections sidebar-section-container">
           <p>{`${lang.nabBarNetworkInfoSyncing} ${progressBar.toFixed(2)}%`}</p>
           <p>{`( Total Headers Synced: ${this.state.headers} )`}</p>
-          <p>{`( ${lang.nabBarNetworkInfoBlock} ${this.state.currentHeight} ${lang.conjuctionOf} ${this.state.headers} )`}</p>
+          <p>{`( ${lang.nabBarNetworkInfoBlock} ${this.state.blocks} ${lang.conjuctionOf} ${this.state.headers} )`}</p>
           <div className="progress custom_progress">
             <div
               className="progress-bar progress-bar-success progress-bar-striped"
@@ -235,7 +236,7 @@ export default class Sidebar extends Component {
               style={{ width: `${progressBar.toFixed(2)}%`, backgroundColor: '#8DA557' }}
             />
           </div>
-          <p>{`${lang.nabBarNetworkInfoActiveConnections}: ${this.state.numpeers}`}</p>
+          <p>{`${lang.nabBarNetworkInfoActiveConnections}: ${this.state.connections}`}</p>
         </div>
         <div className="sidebar-section-container">
         {this.state.running //eslint-disable-line
@@ -248,7 +249,7 @@ export default class Sidebar extends Component {
                     ?
                 <Link to="/downloads" id="a-tag-button-wrapper">
                     <button className="stopStartButton">
-                        Click here to install Wallet 
+                        Click here to install Wallet
                     </button>
                 </Link>
                 :

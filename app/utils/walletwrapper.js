@@ -1,45 +1,53 @@
+import React, { Component } from 'react';
 import Wallet from './wallet';
 const wallet = new Wallet();
 const event = require('../utils/eventhandler');
 import glob from 'glob';
 const homedir = require('os').homedir();
 
-export default class WalletWrapper {
-    constructor(props){
+export default class WalletWrapper extends Component {
+    constructor(props) {
+        super(props);
         this.state = {
-            starting: false,
-            running: false,
-            stopping: false,
-            walletInstalled: false,
-            newVersionAvailable: false,
-    
-            //getblockchaininfo
-            chain: "",
-            bestblockhash: "",
-    
-            //getinfo
-            version: 0,
-            protocolversion: 0,
-            walletversion: 0,
-            balance: 0,
-            newmint: 0,
-            stake:0,
-            blocks: 0, 
-            headers: 0,
-            connections: 0,
-            difficulty: 0,
-            encrypted: false,
-            unlocked_until: 0,
-            staking: false,
+          starting: true,
+          running: true,
+          stopping: false,
+          walletInstalled: false,
+          newVersionAvailable: false,
 
-            //getwalletinfo
-            unconfirmed: 0,
-            immature: 0,
+          //getblockchaininfo
+          chain: "",
+          bestblockhash: "",
+
+          //getinfo
+          version: 0,
+          protocolversion: 0,
+          walletversion: 0,
+          balance: 0,
+          newmint: 0,
+          stake:0,
+          blocks: 0,
+          headers: 0,
+          connections: 0,
+          difficulty: 0,
+          encrypted: false,
+          unlocked_until: 0,
+          staking: false,
+
+          //getwalletinfo
+          unconfirmed: 0,
+          immature: 0,
         };
+        this.getStateValues = this.getStateValues.bind(this);
+        this.updateWalletStatus = this.updateWalletStatus.bind(this);
+        this.getInfo = this.getInfo.bind(this);
+        this.getBlockchainInfo = this.getBlockchainInfo.bind(this);
+        this.getWalletInfo = this.getWalletInfo.bind(this);
+        this.startWallet = this.startWallet.bind(this);
+        this.stopWallet = this.stopWallet.bind(this);
     }
 
     componentDidMount() {
-        console.log("component mounted");
         this.updateWalletStatus();
         this.timerUpdate = setInterval(() => {
             this.updateWalletStatus();
@@ -52,8 +60,8 @@ export default class WalletWrapper {
 
     getStateValues()
     {
-        var results = {};
-        for(var i = 0; i < arguments.length; i++)
+        let results = {};
+        for(let i = 0; i < arguments.length; i++)
         {
             //console.log("checking for arg " + arguments[i]);
             if(this.state[arguments[i]] !== undefined)
@@ -66,11 +74,18 @@ export default class WalletWrapper {
 
     processError(err) {
         console.log(err);
-        if(err.message == 'connect ECONNREFUSED 127.0.0.1:19119'){
+        if(err.message === 'connect ECONNREFUSED 127.0.0.1:19119'){
+            this.setState({
+                starting: false,
+                running: false,
+            });
             event.emit('animate', "Could not connect to wallet service, is it running?");
         }
         else if(err.message.includes("Loading block index")){
-            this.setState({ starting: true, });
+            this.setState({ 
+                starting: true,
+                walletInstalled: true, 
+            });
             event.emit('animate', err.message);
         }
         else{
@@ -80,14 +95,14 @@ export default class WalletWrapper {
     }
 
     getBlockchainInfo() {
-        wallet.getBlockchainInfo().then((data) => {
-            this.setState({
-                chain: data.chain,
-                bestblockhash: data.bestblockhash,
-            });
-        }).catch((err) => {
-            this.processError(err);
-        });
+//        wallet.getBlockchainInfo().then((data) => {
+//            this.setState({
+//                chain: data.chain,
+//                bestblockhash: data.bestblockhash,
+//            });
+//        }).catch((err) => {
+//           this.processError(err);
+//        });
     }
 
     getInfo() {
@@ -116,15 +131,16 @@ export default class WalletWrapper {
         });
     }
 
+
     getWalletInfo() {
-        wallet.getWalletInfo().then((data) => {
-            this.setState({
-                unconfirmed: data.unconfirmed_balance,
-                immature: data.immature_balance,
-            });
-        }).catch((err) => {
-            this.processError(err);
-        });
+//        wallet.getWalletInfo().then((data) => {
+//            this.setState({
+//                unconfirmed: data.unconfirmed_balance,
+//                immature: data.immature_balance,
+//            });
+//        }).catch((err) => {
+//            this.processError(err);
+//        });
     }
 
     updateWalletStatus() {
@@ -144,46 +160,51 @@ export default class WalletWrapper {
                 }
             });
         } else { //if the wallet is running
-        
+            this.setState({
+                walletInstalled: true,
+                running: true,
+            });
+            this.getBlockchainInfo();
+            this.getInfo();
+            this.getWalletInfo();
         }
     }
 
     startWallet() {
-        this.setState(() => {
-            return {
-                starting: true,
-            };
+        this.setState({
+            starting: true,
         });
         wallet.walletstart((result) => {
             if (result) {
-                event.emit('show', result);
-            } 
+                event.emit('show', "Starting wallet...");
+            }
             else {
-                this.setState(() => {
-                    return {
-                        starting: false,
-                    };
+                this.setState({
+                    starting: false,
                 });
-                event.emit('show', 'Could not start wallet. Is it in the correct directory?');
+                if(this.state.walletInstalled == false){
+                    event.emit('show', 'Could not start wallet. Is it in the correct directory?');
+                }
             }
         });
     }
 
-    stopWallet(){
+    stopWallet() {
+        if(this.state.starting == true)
+        {
+            event.emit('animate', 'Cannot stop wallet while block index is loading, it will stop when it is done');
+            return;
+        }
         if (process.platform.indexOf('win') > -1) {
             event.emit('animate', 'Stopping wallet...');
         }
-        this.setState(() => {
-            return {
-                stopping: true,
-            };
+        this.setState({
+            stopping: true,
         });
         wallet.walletstop().then(() => {
-            this.setState(() => {
-                return {
-                    starting: false,
-                    staking: false,
-                };
+            this.setState({
+                starting: false,
+                staking: false,
             });
         })
         .catch(err => {
@@ -192,22 +213,17 @@ export default class WalletWrapper {
     }
 
     render() {
-        return null;
+      const { children } = this.props;
+
+      const childrenWithProps = React.Children.map(children, child => {
+        return React.cloneElement(child, {
+          startWallet: this.startWallet,
+          stopWallet: this.stopWallet,
+          getStateValues: this.getStateValues,
+        });
+      });
+
+      return <div>{childrenWithProps}</div>;
     }
 
 }
-
-export let walletwrapper = new WalletWrapper();
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import glob from 'glob';
-import { walletwrapper }  from '../utils/walletwrapper';
 import { traduction } from '../lang/lang';
 const request = require('request-promise-native');
 const fs = require('fs');
 const event = require('../utils/eventhandler');
-const lang = traduction();;
+const lang = traduction();
 
-export default class Sidebar extends Component {
+export default class BalanceBanner extends Component {
   constructor(props) {
     super(props);
     this.state  = {
@@ -16,6 +15,7 @@ export default class Sidebar extends Component {
       unconfirmed: 0,
       stake: 0,
     };
+    this.getWalletInfo = this.getWalletInfo.bind(this);
   }
 
   componentDidMount() {
@@ -23,7 +23,7 @@ export default class Sidebar extends Component {
   }
   componentWillUnmount() {
     clearInterval(this.timerInfo);
-  } 
+  }
 
 
   setTimerFunctions() {
@@ -34,13 +34,13 @@ export default class Sidebar extends Component {
   }
 
   getWalletInfo() {
-    var results = walletwrapper.getStateValues('balance', 'stake', 'unconfirmed');
-    for( var key in results){
-        //console.log(key, results[key]);
-        this.setState({
-            key : results[key],
-        });
+    var results = this.props.getStateValues('balance', 'stake', 'unconfirmed');
+    const newState = {};
+    for ( let key in results ) {
+      //console.log(key, results[key]);
+      newState[key] = results[key];
     }
+    this.setState(newState);
   }
 
   render() {
